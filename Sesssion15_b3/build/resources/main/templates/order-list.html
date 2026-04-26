@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lịch sử đơn hàng</title>
+
+    <!-- CSS đơn giản -->
+    <style>
+        body { font-family: Arial; }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .pagination a {
+            margin: 5px;
+            padding: 5px 10px;
+            border: 1px solid #333;
+            text-decoration: none;
+        }
+
+        .active {
+            background: #333;
+            color: white;
+        }
+
+        .filter {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h2 style="text-align:center;">📦 Lịch sử đơn hàng</h2>
+
+<!-- ================= FILTER ================= -->
+<div class="filter">
+    <form method="get" action="/orders">
+
+        <select name="status">
+            <option value="ALL"
+                    th:selected="${status == 'ALL'}">Tất cả</option>
+
+            <option value="DELIVERING"
+                    th:selected="${status == 'DELIVERING'}">Đang giao</option>
+
+            <option value="COMPLETED"
+                    th:selected="${status == 'COMPLETED'}">Hoàn thành</option>
+
+            <option value="CANCELLED"
+                    th:selected="${status == 'CANCELLED'}">Đã hủy</option>
+        </select>
+
+        <button type="submit">Lọc</button>
+    </form>
+</div>
+
+<!-- ================= TABLE ================= -->
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+
+        <!-- SORT theo ngày -->
+        <th>
+            <a th:href="@{/orders(
+                page=0,
+                status=${status},
+                sortBy='createdDate',
+                direction=${direction == 'asc' ? 'desc' : 'asc'}
+            )}">
+                Ngày tạo ⬍
+            </a>
+        </th>
+
+        <th>Trạng thái</th>
+
+        <!-- SORT theo tiền -->
+        <th>
+            <a th:href="@{/orders(
+                page=0,
+                status=${status},
+                sortBy='totalAmount',
+                direction=${direction == 'asc' ? 'desc' : 'asc'}
+            )}">
+                Tổng tiền ⬍
+            </a>
+        </th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="o : ${orders}">
+        <td th:text="${o.id}"></td>
+        <td th:text="${#temporals.format(o.createdDate, 'dd/MM/yyyy HH:mm')}"></td>
+        <td th:text="${o.status}"></td>
+        <td th:text="${o.totalAmount}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- ================= PAGINATION ================= -->
+<div class="pagination" style="text-align:center">
+
+    <!-- Previous -->
+    <a th:if="${currentPage > 0}"
+       th:href="@{/orders(
+            page=${currentPage - 1},
+            status=${status},
+            sortBy=${sortBy},
+            direction=${direction}
+       )}">
+        ←
+    </a>
+
+    <!-- Page numbers -->
+    <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+       th:href="@{/orders(
+            page=${i},
+            status=${status},
+            sortBy=${sortBy},
+            direction=${direction}
+       )}"
+       th:text="${i + 1}"
+       th:classappend="${i == currentPage} ? 'active'">
+    </a>
+
+    <!-- Next -->
+    <a th:if="${currentPage < totalPages - 1}"
+       th:href="@{/orders(
+            page=${currentPage + 1},
+            status=${status},
+            sortBy=${sortBy},
+            direction=${direction}
+       )}">
+        →
+    </a>
+
+</div>
+
+</body>
+</html>
