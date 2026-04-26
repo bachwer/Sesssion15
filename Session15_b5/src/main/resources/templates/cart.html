@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cart - Apply Voucher</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f5f5;
+            padding: 40px;
+        }
+
+        .container {
+            width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            margin-top: 15px;
+            width: 100%;
+            padding: 10px;
+            background: #ff5722;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .success {
+            color: green;
+            margin-top: 15px;
+        }
+
+        .error {
+            color: red;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🛒 Giỏ hàng</h2>
+
+    <form action="/apply-voucher" method="post">
+        <label>Nhập mã voucher:</label>
+        <input type="text" name="code" placeholder="VD: IPHONE_1K" required>
+        <button type="submit">Áp dụng</button>
+    </form>
+
+    <!-- SUCCESS -->
+    <p class="success" th:if="${message}" th:text="${message}"></p>
+
+    <!-- ERROR -->
+    <p class="error" th:if="${error}" th:text="${error}"></p>
+
+</div>
+
+</body>
+</html>
