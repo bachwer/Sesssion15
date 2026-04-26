@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product Filter</title>
+</head>
+<body>
+
+<h2>Filter Products</h2>
+
+<form action="/products/filter" method="get">
+    Category: <input type="text" name="category" required>
+    Max Price: <input type="number" name="maxPrice" required>
+    <button type="submit">Search</button>
+</form>
+
+<hr>
+
+<h3>Results:</h3>
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Stock</th>
+    </tr>
+
+    <tr th:each="p : ${products}">
+        <td th:text="${p.name}"></td>
+        <td th:text="${p.category}"></td>
+        <td th:text="${p.price}"></td>
+        <td th:text="${p.stockQuantity}"></td>
+    </tr>
+
+</table>
+
+</body>
+</html>
